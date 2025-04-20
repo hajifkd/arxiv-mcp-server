@@ -8,3 +8,6 @@ dependencies = [
     "arxiv>=2.2.0",
     "mcp[cli]>=1.6.0",
 ]
+
+[project.scripts]
+arxiv-mcp-server = "main:main"

@@ -116,6 +116,9 @@ def fetch_arxiv_results(search):
 
     return results
 
-if __name__ == "__main__":
+def main():
     # Run the server
     mcp.run()
+
+if __name__ == "__main__":
+    main()
