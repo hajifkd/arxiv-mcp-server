@@ -41,19 +41,28 @@ def download_arxiv_paper(paper_id: str) -> str:
 @mcp.tool()
 def today_arxiv(category: str) -> list:
     """
-    Get the latest arXiv papers in a given category.
+    Get the latest arXiv papers in a given category. Papers are not necessarily
+    submitted today; if there are no papers submitted today, it will check up to 7 days
+    back to find the latest papers.
     """
-    today = datetime.date.today()
-    today_str = today.strftime("%Y%m%d")
-    # Fetch the latest papers from arXiv
-    search = arxiv.Search(
-        query=f"cat:{category} AND submittedDate:[{today_str}0000 TO {today_str}2359]",
-        max_results=100,
-        sort_by=arxiv.SortCriterion.SubmittedDate
-    )
 
-    # Call the reusable function to fetch and process results
-    return fetch_arxiv_results(search)
+    # one may need to go back to, say, up to 7 days to get the latest papers
+    # in case the submission date is not today
+    for i in range(7):
+        today = datetime.date.today() - datetime.timedelta(days=i)
+        today_str = today.strftime("%Y%m%d")
+        # Fetch the latest papers from arXiv
+        search = arxiv.Search(
+            query=f"cat:{category} AND submittedDate:[{today_str}0000 TO {today_str}2359]",
+            max_results=100,
+            sort_by=arxiv.SortCriterion.SubmittedDate
+        )
+        # Call the reusable function to fetch and process results
+        results = fetch_arxiv_results(search)
+        if results:
+            return results
+    # If no results found, return an empty list
+    return []
 
 @mcp.tool()
 def weekly_arxiv(category: str) -> list:
