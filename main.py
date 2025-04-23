@@ -5,6 +5,7 @@ import tempfile
 import tarfile
 
 mcp = FastMCP("arXiv server")
+client = arxiv.Client(delay_seconds=5.0)
 
 @mcp.tool()
 def download_arxiv_paper(paper_id: str) -> str:
@@ -14,7 +15,7 @@ def download_arxiv_paper(paper_id: str) -> str:
     """
     search = arxiv.Search(id_list=[paper_id])
     # Create a client instance
-    paper = next(arxiv.Client().results(search))
+    paper = next(client.results(search))
 
     # Create a temporary directory to store the source files
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -108,8 +109,6 @@ def fetch_arxiv_results(search):
     Returns:
         list: A list of dictionaries containing paper information
     """
-    # Create a client instance
-    client = arxiv.Client()
     
     # Collect the results 
     results = []
