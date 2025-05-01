@@ -10,4 +10,4 @@ dependencies = [
 ]
 
 [project.scripts]
-arxiv-mcp-server = "main:main"
+arxiv-mcp-server = "arxiv_mcp_server:main"
